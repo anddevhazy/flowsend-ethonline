@@ -7,8 +7,5 @@ class OnboardingRepositoryImpl implements OnboardingRepository {
   OnboardingRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<bool> getStarted() {
-    remoteDataSource.getStarted();
-    throw UnimplementedError();
-  }
+  Future<bool> getStarted() async => remoteDataSource.getStarted();
 }

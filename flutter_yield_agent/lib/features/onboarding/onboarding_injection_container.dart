@@ -20,11 +20,10 @@ Future<void> onboardingInjectionContainer() async {
   );
 
   // * REPOSITORY & DATA SOURCES INJECTION
-
-  sl.registerLazySingleton<OnboardingRepository>(
-    () => OnboardingRepositoryImpl(remoteDataSource: sl.call()),
-  );
   sl.registerLazySingleton<OnboardingRemoteDataSource>(
     () => OnboardingRemoteDataSourceImpl(),
+  );
+  sl.registerLazySingleton<OnboardingRepository>(
+    () => OnboardingRepositoryImpl(remoteDataSource: sl.call()),
   );
 }

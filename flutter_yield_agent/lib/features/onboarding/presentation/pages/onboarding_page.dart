@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yield_agent/features/onboarding/presentation/bloc/onboarding_cubit.dart';
+import 'package:yield_agent/service_locator.dart';
 
 class OnboardingPage extends StatefulWidget {
   //state class
@@ -38,8 +39,8 @@ class _OnboardingPageState
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          OnboardingCubit(getStartedUsecase: context.read()), // inject usecase
+      create: (context) => sl<OnboardingCubit>(),
+
       child: BlocConsumer<OnboardingCubit, OnboardingState>(
         listener: (context, state) {
           if (state is Successful) {

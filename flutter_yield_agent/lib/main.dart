@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:yield_agent/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:yield_agent/features/dashboard/presentation/pages/deposit_page.dart';
 import 'package:yield_agent/features/onboarding/presentation/pages/onboarding_page.dart';
+import 'main_injection_container.dart' as di;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   runApp(const MyApp());
 }
 
