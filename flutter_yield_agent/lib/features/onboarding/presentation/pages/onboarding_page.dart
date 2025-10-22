@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yield_agent/features/onboarding/presentation/bloc/onboarding_cubit.dart';
 import 'package:yield_agent/service_locator.dart';
+import 'package:yield_agent/shared/animated_dots_text.dart';
+import 'package:yield_agent/shared/custom_snackbar.dart';
 
 class OnboardingPage extends StatefulWidget {
   //state class
@@ -44,12 +46,10 @@ class _OnboardingPageState
       child: BlocConsumer<OnboardingCubit, OnboardingState>(
         listener: (context, state) {
           if (state is Successful) {
-            // optional: show a snackbar or navigate
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Wallet Created Successfully!")),
-            );
+            showCustomSnackBar(context, "Wallet Created Successfully!");
           }
         },
+
         builder: (context, state) {
           final cubit = context.read<OnboardingCubit>();
 
@@ -125,103 +125,76 @@ class _OnboardingPageState
                     const SizedBox(height: 32),
 
                     // 🚀 Get Started Button
-                    GestureDetector(
-                      onTap: state is! Loading
-                          ? () => cubit.getStarted()
-                          : null, // disable while loading
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF246BFD),
-                          borderRadius: BorderRadius.circular(14),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color.fromRGBO(255, 255, 255, 0.05),
-                              blurRadius: 10,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: state is Loading
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
+                    if (state is! Successful)
+                      GestureDetector(
+                        onTap: state is! Loading
+                            ? () => cubit.getStarted()
+                            : null,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF246BFD),
+                            borderRadius: BorderRadius.circular(14),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromRGBO(255, 255, 255, 0.05),
+                                blurRadius: 10,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: state is Loading
+                                ? const AnimatedDotsText(
+                                    baseText: "Creating wallet",
+                                  )
+                                : const Text(
+                                    'Get Started',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      color: Color(0xFFFFFFFF),
+                                    ),
                                   ),
-                                )
-                              : const Text(
-                                  'Get Started',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                    color: Color(0xFFFFFFFF),
-                                  ),
-                                ),
+                          ),
                         ),
                       ),
-                    ),
-
-                    const SizedBox(height: 24),
 
                     // ✅ Success State
                     if (state is Successful)
-                      Column(
-                        children: [
-                          const Icon(
-                            Icons.check_circle_outline,
-                            size: 24,
-                            color: Color(0xFF2ED573),
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to dashboard
+                          // Navigator.pushNamed(context, '/dashboard');
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF246BFD),
+                            borderRadius: BorderRadius.circular(14),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromRGBO(255, 255, 255, 0.05),
+                                blurRadius: 10,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Wallet Created Successfully',
+                          child: const Text(
+                            'Go to Dashboard',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontFamily: 'Inter',
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                               fontSize: 16,
                               color: Color(0xFFFFFFFF),
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          GestureDetector(
-                            onTap: () {
-                              // Navigate to dashboard
-                              // Navigator.pushNamed(context, '/dashboard');
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF246BFD),
-                                borderRadius: BorderRadius.circular(14),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Color.fromRGBO(255, 255, 255, 0.05),
-                                    blurRadius: 10,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: const Text(
-                                'Go to Dashboard',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                  color: Color(0xFFFFFFFF),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
 
                     if (state is Failed)

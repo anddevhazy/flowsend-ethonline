@@ -5,7 +5,7 @@ class OnboardingRemoteDataSourceImpl implements OnboardingRemoteDataSource {
 
   @override
   Future<bool> getStarted() async {
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(Duration(seconds: 4));
     return true;
   }
 }
