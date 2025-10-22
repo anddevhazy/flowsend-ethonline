@@ -1,8 +1,10 @@
+import 'package:yield_agent/features/onboarding/data/data_sources/remote/onboarding_remote_data_source.dart';
+import 'package:yield_agent/features/onboarding/data/data_sources/remote/onboarding_remote_data_source_impl.dart';
 import 'package:yield_agent/features/onboarding/data/repositories/onboarding_repository_impl.dart';
 import 'package:yield_agent/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:yield_agent/features/onboarding/domain/usecases/get_started_usecase.dart';
 import 'package:yield_agent/features/onboarding/presentation/bloc/onboarding_cubit.dart';
-import 'package:yield_agent/main_injection_container.dart';
+import 'package:yield_agent/service_locator.dart';
 
 Future<void> onboardingInjectionContainer() async {
   // * CUBITS INJECTION
@@ -21,5 +23,8 @@ Future<void> onboardingInjectionContainer() async {
 
   sl.registerLazySingleton<OnboardingRepository>(
     () => OnboardingRepositoryImpl(remoteDataSource: sl.call()),
+  );
+  sl.registerLazySingleton<OnboardingRemoteDataSource>(
+    () => OnboardingRemoteDataSourceImpl(),
   );
 }

@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yield_agent/features/onboarding/presentation/bloc/onboarding_cubit.dart';
 
 class OnboardingPage extends StatefulWidget {
+  //state class
   const OnboardingPage({super.key});
 
   @override
   State<OnboardingPage> createState() => _OnboardingPageState();
 }
 
-class _OnboardingPageState extends State<OnboardingPage>
+class _OnboardingPageState
+    extends
+        State<OnboardingPage> // widget class
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
-  bool _isWalletCreated = false;
 
   @override
   void initState() {
@@ -33,142 +37,102 @@ class _OnboardingPageState extends State<OnboardingPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF101114), // Background Base
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // 🌟 App Logo
-              FadeTransition(
-                opacity: _fadeAnimation,
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: const Color(0xFF181A1E), // Card Background
-                    border: Border.all(
-                      color: const Color(0xFF2A2C31),
-                      width: 1,
-                    ),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromRGBO(255, 255, 255, 0.05),
-                        blurRadius: 10,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/logo.png',
-                      width: 96,
-                      height: 96,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-              ),
+    return BlocProvider(
+      create: (_) =>
+          OnboardingCubit(getStartedUsecase: context.read()), // inject usecase
+      child: BlocConsumer<OnboardingCubit, OnboardingState>(
+        listener: (context, state) {
+          if (state is Successful) {
+            // optional: show a snackbar or navigate
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Wallet Created Successfully!")),
+            );
+          }
+        },
+        builder: (context, state) {
+          final cubit = context.read<OnboardingCubit>();
 
-              const SizedBox(height: 32),
-
-              // 🧠 Headline
-              const Text(
-                'Automated DeFi Yield Optimization',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 28,
-                  color: Color(0xFFFFFFFF),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // 📝 Subtext
-              const Text(
-                'Maximize your returns effortlessly with secure, automated yield strategies powered by MPC technology.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  color: Color(0xFFA3A3A3),
-                  height: 1.3,
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isWalletCreated = true;
-                  });
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF246BFD), // Primary
-                    borderRadius: BorderRadius.circular(14),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromRGBO(255, 255, 255, 0.05),
-                        blurRadius: 10,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: const Text(
-                    'Get Started',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: Color(0xFFFFFFFF),
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // ✅ Success State
-              if (_isWalletCreated)
-                Column(
+          return Scaffold(
+            backgroundColor: const Color(0xFF101114),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
-                      Icons.check_circle_outline,
-                      size: 24,
-                      color: Color(0xFF2ED573), // Success
+                    // 🌟 App Logo
+                    FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFF181A1E),
+                          border: Border.all(
+                            color: const Color(0xFF2A2C31),
+                            width: 1,
+                          ),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color.fromRGBO(255, 255, 255, 0.05),
+                              blurRadius: 10,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/logo.png',
+                            width: 96,
+                            height: 96,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 8),
+
+                    const SizedBox(height: 32),
+
+                    // 🧠 Headline
                     const Text(
-                      'Wallet Created Successfully',
+                      'Automated DeFi Yield Optimization',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 28,
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
+
                     const SizedBox(height: 16),
+
+                    // 📝 Subtext
+                    const Text(
+                      'Maximize your returns effortlessly with secure, automated yield strategies powered by MPC technology.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        color: Color(0xFFA3A3A3),
+                        height: 1.3,
+                      ),
+                    ),
+
+                    const SizedBox(height: 32),
+
+                    // 🚀 Get Started Button
                     GestureDetector(
-                      onTapDown: (_) {
-                        // Handle tap animation (scale down to 96%)
-                      },
+                      onTap: state is! Loading
+                          ? () => cubit.getStarted()
+                          : null, // disable while loading
                       child: Container(
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF246BFD), // Primary
+                          color: const Color(0xFF246BFD),
                           borderRadius: BorderRadius.circular(14),
                           boxShadow: const [
                             BoxShadow(
@@ -178,23 +142,101 @@ class _OnboardingPageState extends State<OnboardingPage>
                             ),
                           ],
                         ),
-                        child: const Text(
-                          'Go to Dashboard',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: Color(0xFFFFFFFF),
-                          ),
+                        child: Center(
+                          child: state is Loading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Text(
+                                  'Get Started',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    color: Color(0xFFFFFFFF),
+                                  ),
+                                ),
                         ),
                       ),
                     ),
+
+                    const SizedBox(height: 24),
+
+                    // ✅ Success State
+                    if (state is Successful)
+                      Column(
+                        children: [
+                          const Icon(
+                            Icons.check_circle_outline,
+                            size: 24,
+                            color: Color(0xFF2ED573),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Wallet Created Successfully',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              color: Color(0xFFFFFFFF),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () {
+                              // Navigate to dashboard
+                              // Navigator.pushNamed(context, '/dashboard');
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF246BFD),
+                                borderRadius: BorderRadius.circular(14),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color.fromRGBO(255, 255, 255, 0.05),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: const Text(
+                                'Go to Dashboard',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                    if (state is Failed)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 24.0),
+                        child: Text(
+                          'Something went wrong. Try again.',
+                          style: TextStyle(color: Colors.redAccent),
+                        ),
+                      ),
                   ],
                 ),
-            ],
-          ),
-        ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
