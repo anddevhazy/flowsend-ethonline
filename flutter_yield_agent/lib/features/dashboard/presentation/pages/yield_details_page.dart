@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class YieldDetailsPage extends StatelessWidget {
@@ -20,7 +21,7 @@ class YieldDetailsPage extends StatelessWidget {
               const SizedBox(height: 24),
               Expanded(
                 child: ListView.builder(
-                  itemCount: 3, // Example count, replace with your data
+                  itemCount: 8,
                   itemBuilder: (context, index) => _buildProtocolCard(index),
                 ),
               ),
@@ -45,6 +46,8 @@ class YieldDetailsPage extends StatelessWidget {
 
   Widget _buildTotalYieldCard() {
     return Container(
+      width: double.infinity,
+
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       decoration: BoxDecoration(
         color: const Color(0xFF181A1E), // Card Background
@@ -60,6 +63,7 @@ class YieldDetailsPage extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+
         children: [
           Text(
             'Total Yield Earned',
@@ -86,12 +90,56 @@ class YieldDetailsPage extends StatelessWidget {
   }
 
   Widget _buildProtocolCard(int index) {
-    // Example data for demonstration; replace with your data
-    final protocols = ['Aave', 'Compound', 'Curve'];
-    final tokens = ['USDC', 'USDT', 'DAI'];
-    final amounts = ['1,000', '750', '500'];
-    final yields = ['4.5%', '3.8%', '5.2%'];
-    final times = ['12h ago', '1d ago', '2d ago'];
+    final protocols = [
+      'Aave',
+      'Compound',
+      'Curve',
+      'Balancer',
+      'SushiSwap',
+      'Yearn',
+      'MakerDAO',
+      'Lido',
+    ];
+    final tokens = [
+      'USDC',
+      'USDT',
+      'DAI',
+      'ETH',
+      'BTC',
+      'USDC',
+      'DAI',
+      'stETH',
+    ];
+    final amounts = [
+      '1,000',
+      '750',
+      '500',
+      '2,300',
+      '0.5',
+      '1,200',
+      '600',
+      '3.4',
+    ];
+    final yields = [
+      '4.5%',
+      '3.8%',
+      '5.2%',
+      '4.1%',
+      '3.5%',
+      '6.0%',
+      '4.8%',
+      '5.6%',
+    ];
+    final times = [
+      '12h ago',
+      '1d ago',
+      '2d ago',
+      '3d ago',
+      '4d ago',
+      '5d ago',
+      '6d ago',
+      '1w ago',
+    ];
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
@@ -123,7 +171,7 @@ class YieldDetailsPage extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      protocols[index][0], // Placeholder for protocol logo
+                      protocols[index][0],
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
@@ -200,15 +248,25 @@ class YieldDetailsPage extends StatelessWidget {
                 border: Border.all(color: const Color(0xFF2A2C31), width: 1),
               ),
               // Placeholder for mini line chart (Recharts equivalent)
-              child: Center(
-                child: Text(
-                  'Mini Line Chart Placeholder',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: const Color(0xFFA3A3A3),
-                  ),
+              child: LineChart(
+                LineChartData(
+                  gridData: FlGridData(show: false),
+                  titlesData: FlTitlesData(show: false),
+                  borderData: FlBorderData(show: false),
+                  lineTouchData: LineTouchData(enabled: false),
+                  lineBarsData: [
+                    LineChartBarData(
+                      isCurved: true,
+                      color: const Color(0xFF13D6C3),
+                      barWidth: 2,
+                      dotData: FlDotData(show: false),
+                      belowBarData: BarAreaData(
+                        show: true,
+                        color: const Color(0xFF13D6C3).withOpacity(0.15),
+                      ),
+                      spots: _getSampleSpots(index),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -216,5 +274,74 @@ class YieldDetailsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+List<FlSpot> _getSampleSpots(int index) {
+  switch (index) {
+    case 0:
+      return const [
+        FlSpot(0, 1),
+        FlSpot(1, 1.3),
+        FlSpot(2, 1.5),
+        FlSpot(3, 1.4),
+        FlSpot(4, 1.8),
+      ];
+    case 1:
+      return const [
+        FlSpot(0, 1),
+        FlSpot(1, 0.9),
+        FlSpot(2, 1.1),
+        FlSpot(3, 1.0),
+        FlSpot(4, 1.3),
+      ];
+    case 2:
+      return const [
+        FlSpot(0, 1.2),
+        FlSpot(1, 1.4),
+        FlSpot(2, 1.6),
+        FlSpot(3, 1.5),
+        FlSpot(4, 1.9),
+      ];
+    case 3:
+      return const [
+        FlSpot(0, 1.1),
+        FlSpot(1, 1.3),
+        FlSpot(2, 1.2),
+        FlSpot(3, 1.5),
+        FlSpot(4, 1.7),
+      ];
+    case 4:
+      return const [
+        FlSpot(0, 0.9),
+        FlSpot(1, 1.0),
+        FlSpot(2, 1.2),
+        FlSpot(3, 1.3),
+        FlSpot(4, 1.4),
+      ];
+    case 5:
+      return const [
+        FlSpot(0, 1.0),
+        FlSpot(1, 1.2),
+        FlSpot(2, 1.5),
+        FlSpot(3, 1.8),
+        FlSpot(4, 2.0),
+      ];
+    case 6:
+      return const [
+        FlSpot(0, 1.4),
+        FlSpot(1, 1.5),
+        FlSpot(2, 1.6),
+        FlSpot(3, 1.7),
+        FlSpot(4, 1.9),
+      ];
+    default:
+      return const [
+        FlSpot(0, 1.3),
+        FlSpot(1, 1.5),
+        FlSpot(2, 1.4),
+        FlSpot(3, 1.6),
+        FlSpot(4, 1.8),
+      ];
   }
 }

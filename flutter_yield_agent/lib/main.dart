@@ -34,4 +34,21 @@ class MyApp extends StatelessWidget {
       routerConfig: Routes.router,
     );
   }
+
+  // @override
+  // return MaterialApp(
+  //     title: 'Yield Agent',
+  //     debugShowCheckedModeBanner: false,
+  //     theme: ThemeData(
+  //       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+  //       // textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
+  //     ),
+  //     // home: const OnboardingPage(),
+  //     // home: const DashboardPage(),
+  //     // home: const DepositPage(),
+  //     // home: const WithdrawPage(),
+  //     // home: const TransactionsPage(),
+  //     // home: const SettingsPage(),
+  //   );
+  // }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -16,7 +17,7 @@ class SettingsPage extends StatelessWidget {
               const SizedBox(height: 24),
               _buildHeader(),
               const SizedBox(height: 24),
-              _buildProfileCard(),
+              _buildProfileCard(context),
               const SizedBox(height: 16),
               _buildRiskLevelCard(),
               const SizedBox(height: 16),
@@ -42,8 +43,10 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileCard() {
+  Widget _buildProfileCard(BuildContext context) {
     return Container(
+      width: double.infinity,
+
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       decoration: BoxDecoration(
         color: const Color(0xFF181A1E), // Card Background
@@ -80,14 +83,35 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            'Wallet: 0x1234...5678',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              color: const Color(0xFFA3A3A3),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  'Wallet: 0x1234...5678',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: const Color(0xFFA3A3A3),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(const ClipboardData(text: '0x1234...5678'));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Wallet address copied!')),
+                  );
+                },
+                child: const Icon(
+                  Icons.copy,
+                  color: Color(0xFFA3A3A3),
+                  size: 18,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -144,6 +168,8 @@ class SettingsPage extends StatelessWidget {
 
   Widget _buildAppInfoCard() {
     return Container(
+      width: double.infinity,
+
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       decoration: BoxDecoration(
         color: const Color(0xFF181A1E), // Card Background

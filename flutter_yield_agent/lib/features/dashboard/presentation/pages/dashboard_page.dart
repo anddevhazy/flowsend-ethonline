@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:go_router/go_router.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -17,7 +18,7 @@ class DashboardPage extends StatelessWidget {
               const SizedBox(height: 24),
               _buildHeaderCard(),
               const SizedBox(height: 24),
-              _buildMidSection(),
+              _buildMidSection(context),
             ],
           ),
         ),
@@ -125,7 +126,7 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMidSection() {
+  Widget _buildMidSection(BuildContext context) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,47 +280,62 @@ class DashboardPage extends StatelessWidget {
           ),
 
           const SizedBox(height: 24),
-          _buildQuickActions(),
+          _buildQuickActions(context),
         ],
       ),
     );
   }
 
-  Widget _buildQuickActions() {
+  Widget _buildQuickActions(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildQuickActionButton('Deposit'),
-        _buildQuickActionButton('Withdraw'),
-        _buildQuickActionButton('Transactions'),
+        _buildQuickActionButton(context, 'Deposit'),
+        _buildQuickActionButton(context, 'Withdraw'),
+        _buildQuickActionButton(context, 'Transactions'),
       ],
     );
   }
 
-  Widget _buildQuickActionButton(String label) {
+  Widget _buildQuickActionButton(BuildContext context, String label) {
     return Expanded(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: const Color(0xFF246BFD), // Primary
-          borderRadius: BorderRadius.circular(14),
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(255, 255, 255, 0.05),
-              blurRadius: 10,
-              offset: Offset(0, 2),
+      child: GestureDetector(
+        onTap: () {
+          switch (label) {
+            case 'Deposit':
+              context.pushNamed('deposit');
+              break;
+            case 'Withdraw':
+              context.pushNamed('withdraw');
+              break;
+            case 'Transactions':
+              context.pushNamed('transactions');
+              break;
+          }
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            color: const Color(0xFF246BFD),
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: const [
+              BoxShadow(
+                color: Color.fromRGBO(255, 255, 255, 0.05),
+                blurRadius: 10,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+              color: Color(0xFFFFFFFF),
             ),
-          ],
-        ),
-        child: Text(
-          label,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
-            color: const Color(0xFFFFFFFF),
           ),
         ),
       ),

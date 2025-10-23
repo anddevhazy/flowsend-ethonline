@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yield_agent/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:yield_agent/features/dashboard/presentation/pages/deposit_page.dart';
 import 'package:yield_agent/features/dashboard/presentation/pages/settings_page.dart';
+import 'package:yield_agent/features/dashboard/presentation/pages/transactions_page.dart';
+import 'package:yield_agent/features/dashboard/presentation/pages/withdraw_page.dart';
 import 'package:yield_agent/features/dashboard/presentation/pages/yield_details_page.dart';
 import 'package:yield_agent/features/onboarding/presentation/pages/onboarding_page.dart';
 import 'package:yield_agent/global/main_scaffold.dart';
@@ -23,17 +26,14 @@ class Routes {
   static const String settingsPath = '/settings';
   static const String settingsName = 'settings';
 
-  // static const String accountPath = '/account';
-  // static const String accountName = 'account';
+  static const String depositPath = '/deposit';
+  static const String depositName = 'deposit';
 
-  // static const String explorePath = '/explore';
-  // static const String exploreName = 'explore';
+  static const String withdrawPath = '/withdraw';
+  static const String withdrawName = 'withdraw';
 
-  // static const String favouritePath = '/favourite';
-  // static const String favouriteName = 'favourite';
-
-  // static const String orderAcceptedPath = '/orderAccepted';
-  // static const String orderAcceptedName = 'orderAccepted';
+  static const String transactionsPath = '/transactions';
+  static const String transactionsName = 'transactions';
 
   static final GlobalKey<NavigatorState> rootNavigatorKey =
       GlobalKey<NavigatorState>();
@@ -50,16 +50,26 @@ class Routes {
         name: splashName,
         builder: (context, state) => const SplashScreen(),
       ),
-      // GoRoute(
-      //   path: loginPath,
-      //   name: loginName,
-      //   builder: (context, state) =>
-      //       const LoginScreen(emailController: null, passwordController: null),
-      // ),
+
       GoRoute(
         path: onboardingPath,
         name: onboardingName,
         builder: (context, state) => const OnboardingPage(),
+      ),
+      GoRoute(
+        path: depositPath,
+        name: depositName,
+        builder: (context, state) => const DepositPage(),
+      ),
+      GoRoute(
+        path: withdrawPath,
+        name: withdrawName,
+        builder: (context, state) => const WithdrawPage(),
+      ),
+      GoRoute(
+        path: transactionsPath,
+        name: transactionsName,
+        builder: (context, state) => const TransactionsPage(),
       ),
       ShellRoute(
         navigatorKey: shellNavigatorKey,
@@ -81,21 +91,6 @@ class Routes {
             name: settingsName,
             builder: (context, state) => const SettingsPage(),
           ),
-          //     GoRoute(
-          //       path: explorePath,
-          //       name: exploreName,
-          //       builder: (context, state) => const ExploreScreen(),
-          //     ),
-          //     GoRoute(
-          //       path: favouritePath,
-          //       name: favouriteName,
-          //       builder: (context, state) => const FavouriteScreen(),
-          //     ),
-          //     GoRoute(
-          //       path: accountPath,
-          //       name: accountName,
-          //       builder: (context, state) => const AccountScreen(),
-          //     ),
         ],
       ),
     ],
