@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:yield_agent/features/onboarding/presentation/bloc/onboarding_cubit.dart';
 import 'package:yield_agent/service_locator.dart';
-import 'package:yield_agent/shared/animated_dots_text.dart';
-import 'package:yield_agent/shared/custom_snackbar.dart';
+import 'package:yield_agent/global/animated_dots_text.dart';
+import 'package:yield_agent/global/custom_snackbar.dart';
 
 class OnboardingPage extends StatefulWidget {
   //state class
@@ -167,8 +168,7 @@ class _OnboardingPageState
                     if (state is Successful)
                       GestureDetector(
                         onTap: () {
-                          // Navigate to dashboard
-                          // Navigator.pushNamed(context, '/dashboard');
+                          context.goNamed('dashboard');
                         },
                         child: Container(
                           width: double.infinity,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -21,7 +22,6 @@ class DashboardPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -140,6 +140,8 @@ class DashboardPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
+
+          // Inside _buildMidSection()
           Container(
             height: 200,
             decoration: BoxDecoration(
@@ -147,19 +149,52 @@ class DashboardPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: const Color(0xFF2A2C31), width: 1),
             ),
-            // Placeholder for Pie Chart (Recharts equivalent)
-            child: Center(
-              child: Text(
-                'Pie Chart Placeholder',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  color: const Color(0xFFA3A3A3),
-                ),
+            child: PieChart(
+              PieChartData(
+                sections: [
+                  PieChartSectionData(
+                    value: 40,
+                    color: Colors.blue,
+                    radius: 50,
+                    title: '40%',
+                    titleStyle: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  PieChartSectionData(
+                    value: 30,
+                    color: Colors.green,
+                    radius: 50,
+                    title: '30%',
+                    titleStyle: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  PieChartSectionData(
+                    value: 30,
+                    color: Colors.orange,
+                    radius: 50,
+                    title: '30%',
+                    titleStyle: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+                sectionsSpace: 2,
+                centerSpaceRadius: 40,
               ),
             ),
           ),
+
           const SizedBox(height: 24),
           Text(
             'Performance Trend',
@@ -178,19 +213,71 @@ class DashboardPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: const Color(0xFF2A2C31), width: 1),
             ),
-            // Placeholder for Bar Chart (Recharts equivalent)
-            child: Center(
-              child: Text(
-                'Bar Chart Placeholder',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  color: const Color(0xFFA3A3A3),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.spaceAround,
+                maxY: 100,
+                gridData: FlGridData(show: false),
+                borderData: FlBorderData(show: false),
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: true, reservedSize: 28),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (double value, TitleMeta meta) {
+                        final labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+                        return Text(
+                          labels[value.toInt()],
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontFamily: 'Inter',
+                          ),
+                        );
+                      },
+                      reservedSize: 28,
+                    ),
+                  ),
                 ),
+                barGroups: [
+                  BarChartGroupData(
+                    x: 0,
+                    barRods: [
+                      BarChartRodData(toY: 50, color: Colors.blue, width: 14),
+                    ],
+                  ),
+                  BarChartGroupData(
+                    x: 1,
+                    barRods: [
+                      BarChartRodData(toY: 70, color: Colors.blue, width: 14),
+                    ],
+                  ),
+                  BarChartGroupData(
+                    x: 2,
+                    barRods: [
+                      BarChartRodData(toY: 30, color: Colors.blue, width: 14),
+                    ],
+                  ),
+                  BarChartGroupData(
+                    x: 3,
+                    barRods: [
+                      BarChartRodData(toY: 80, color: Colors.blue, width: 14),
+                    ],
+                  ),
+                  BarChartGroupData(
+                    x: 4,
+                    barRods: [
+                      BarChartRodData(toY: 60, color: Colors.blue, width: 14),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
+
           const SizedBox(height: 24),
           _buildQuickActions(),
         ],
@@ -236,34 +323,6 @@ class DashboardPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return Container(
-      height: 70,
-      decoration: const BoxDecoration(
-        color: Color(0xFF181A1E),
-        border: Border(top: BorderSide(color: Color(0xFF2A2C31), width: 1)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(Icons.home, isActive: true),
-          _buildNavItem(Icons.swap_horiz, isActive: false),
-          _buildNavItem(Icons.settings, isActive: false),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, {required bool isActive}) {
-    return Icon(
-      icon,
-      size: 24,
-      color: isActive
-          ? const Color(0xFF246BFD) // Primary
-          : const Color(0xFFFFFFFF).withOpacity(0.8),
     );
   }
 }
